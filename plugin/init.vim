@@ -56,6 +56,7 @@ function! RunCmd(...)
     let line = EscapeLine(line)
     let pycmd = "LeaderCmd.extractRunCmd(\"".line."\",\"".direction."\")"
     let ret = py3eval(pycmd)
+    sleep 100m
     return ret
 endfunction
 
