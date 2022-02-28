@@ -6,8 +6,18 @@ vim --version | grep python3
 
 ![demo](testdata/vfutils.gif)
 
+# Install
+Add the following line to `~/.vimrc`
+```
+call plug#begin('~/.vim/plugged')
+Plug 'vitalstarorg/vim-vfutils'
+call plug#end()
+```
+
 # Default Config
 ```
+let mapleader = '\'
+
 " LCmd
 nnoremap <leader>\ :call LCmd()<cr><cr>
 
@@ -62,15 +72,20 @@ xxx ** LCmd # jump to LCmd
 ```
 
 # RunCmd
-```
 Send the line to a neighbouring tmux pane and execute. `\<down>` `\<right>` `\<up>` `\<left>` specifies which pane the line will be executed.
+
 ```
-```bash
 # Open a tmux pane around the main pane, before you try these 4 commands
 cd python
 ls
 vi leadercmd.py
+```
 
+Send the command without needing a tmux pane
+
+```
+#@ tmux split-window -hd
+#@ tmux split-window -vd
 ```
 
 # RunCmdUntil
