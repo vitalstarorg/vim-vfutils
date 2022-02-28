@@ -1,5 +1,28 @@
 # vim-vfutils
-`vim-vfutils` has a set helper features for vim with tmux.
+`vim-vfutils` has a set helper features for vim with tmux on macos. Make sure your vim support python3.
+```
+vim --version | grep python3
+```
+
+![demo](testdata/vfutils.gif)
+
+# Default Config
+```
+" LCmd
+nnoremap <leader>\ :call LCmd()<cr><cr>
+
+" RunCmd
+nnoremap <Leader><Right> :call RunCmd("right")<CR><Down>
+nnoremap <Leader><Down> :call RunCmd("down")<CR><Down>
+nnoremap <Leader><Up> :call RunCmd("up")<CR><Down>
+nnoremap <Leader><Left> :call RunCmd("left")<CR><Down>
+
+" RunUntil
+nnoremap `<Right> :call RunCmdUntil("right")<CR><CR>
+nnoremap `<Down> :call RunCmdUntil("down")<CR><CR>
+nnoremap `<Up> :call RunCmdUntil("up")<CR><CR>
+nnoremap `<Left> :call RunCmdUntil("left")<CR><CR>
+```
 
 # LCmd
 In vim normal mode, type `\\` on the line below, it will trigger different function. `\` is used as the leader.
@@ -43,7 +66,7 @@ xxx ** LCmd # jump to LCmd
 Send the line to a neighbouring tmux pane and execute. `\<down>` `\<right>` `\<up>` `\<left>` specifies which pane the line will be executed.
 ```
 ```bash
-# Open a tmux pane around the main pane, before you try these 4 command
+# Open a tmux pane around the main pane, before you try these 4 commands
 cd python
 ls
 vi leadercmd.py
@@ -56,7 +79,7 @@ Similar to RunCmd, but run the line and following lines until an empty line or `
 ```
 
 ```bash
-# Open a tmux pane around the main pane, before you try these 4 command
+# Open a tmux pane around the main pane, before you try these 4 commands
 cd python
 ls
 vi leadercmd.py
