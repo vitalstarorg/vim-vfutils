@@ -1,7 +1,15 @@
 # vim-vfutils
-`vim-vfutils` has a set helper features for vim with tmux on macos. Make sure your vim support python3.
+`vim-vfutils` has a set helper features for vim with tmux on macos to help with creating a devops runbook. Below features are helping to manage multiple project files and run documented commands to avoid copy & paste.
+
+1. Navigate within a file, preferably a markdown file.
+2. Navigate to different project file.
+3. Open URL on the browser, helpful to manage & document multiple URLs
+4. Multiple way to run a single or multiple commands to adjacent tmux pane or on vim itself.t
+
+Make sure your vim supports python3.
 ```
-vim --version | grep python3
+$ vim --version | grep +python3
++python3
 ```
 
 ![demo](testdata/vfutils.gif)
