@@ -69,6 +69,14 @@ xxx ++ LCmd
 xxx * LCmd
 xxx ** LCmd
 xxx ** LCmd # jump to LCmd
+
+# Execute hashbang #!command as shell command
+#! tmux split-window -hd
+#! tmux split-window -vd
+
+# Execute vimbang #:command as vim command
+#:reg
+#:help
 ```
 
 # RunCmd
@@ -79,13 +87,6 @@ Send the line to a neighbouring tmux pane and execute. `\<down>` `\<right>` `\<u
 cd python
 ls
 vi leadercmd.py
-```
-
-Send the command without needing a tmux pane
-
-```
-#@ tmux split-window -hd
-#@ tmux split-window -vd
 ```
 
 # RunCmdUntil

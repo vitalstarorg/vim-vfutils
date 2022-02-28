@@ -31,18 +31,26 @@ function! LCmd(...)
     endif
     if results[0] != ""
       execute results[0]
+      normal! <cr>
       if results[1] != ""
         let @/ = results[1]
-        normal! k
+        "normal! k
       endif
     else
       echo "Nothing to execute"
-      normal! k
+      "normal! k
     endif
     if results[2] != ""
       "skip echo as that will wait for ENTER.
       echo results[2]
     endif
+endfunction
+
+function! LCmdTest(...)
+    let line = EscapeLine()
+    let pycmd = "LeaderCmd.extractLCmd(\"".line."\", True)"
+    let results = py3eval(pycmd)
+    echo results
 endfunction
 
 function! RunCmd(...)
@@ -84,7 +92,8 @@ function! Tryout()
 "    return ret
 endfunction
 
-nnoremap <leader>\ :call LCmd()<cr><cr>
+nnoremap <leader>\ :call LCmd()<cr>
+nnoremap <leader>T :call LCmdTest()<cr>
 nnoremap <Leader><Right> :call RunCmd("right")<CR><Down>
 nnoremap <Leader><Down> :call RunCmd("down")<CR><Down>
 nnoremap <Leader><Up> :call RunCmd("up")<CR><Down>

@@ -9,6 +9,11 @@
 - https://github.com/vitalstarorg/vim-vfutils # comment
 - [vim-vfutils](https://github.com/vitalstarorg/vim-vfutils) # comment
 
+#! tmux split-window -hd
+#! tmux split-window -vd
+#: reg
+#: help
+
 ## Open local file
 - vimtest2.md
 - @vimtest2.md # added @ as a reminder it is a redirection
