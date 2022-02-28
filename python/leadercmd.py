@@ -122,28 +122,28 @@ class TestLeaderCmd(unittest.TestCase):
 
     # reg3
     result = LeaderCmd.extractLCmd("  @A/B")
-    self.assertEqual(":/A\/B", result[0])
+    self.assertEqual("/A\/B", result[0])
     self.assertEqual("A\/B", result[1])
     self.assertEqual("Found @Marker", result[2])
 
     result = LeaderCmd.extractLCmd("**:@A/B ")
-    self.assertEqual(":/A\/B", result[0])
+    self.assertEqual("/A\/B", result[0])
     self.assertEqual("A\/B", result[1])
     self.assertEqual("Found @Marker", result[2])
 
     result = LeaderCmd.extractLCmd("**:@A/B # comment")
-    self.assertEqual(":/A\/B", result[0])
+    self.assertEqual("/A\/B", result[0])
     self.assertEqual("A\/B", result[1])
     self.assertEqual("Found @Marker", result[2])
 
     # reg4
     result = LeaderCmd.extractLCmd("**:A/B ")
-    self.assertEqual(":/A\/B", result[0])
+    self.assertEqual("/A\/B", result[0])
     self.assertEqual("A\/B", result[1])
     self.assertEqual("Found mindmap header", result[2])
 
     result = LeaderCmd.extractLCmd("**:A/B # comment")
-    self.assertEqual(":/A\/B", result[0])
+    self.assertEqual("/A\/B", result[0])
     self.assertEqual("A\/B", result[1])
     self.assertEqual("Found mindmap header", result[2])
 
@@ -155,12 +155,12 @@ class TestLeaderCmd(unittest.TestCase):
 
     # reg6
     result = LeaderCmd.extractLCmd("  - A/B")
-    self.assertEqual(":/A\/B", result[0])
+    self.assertEqual("/A\/B", result[0])
     self.assertEqual("A\/B", result[1])
     self.assertEqual("Found mindmap item", result[2])
 
     result = LeaderCmd.extractLCmd("  - A/B # comment")
-    self.assertEqual(":/A\/B", result[0])
+    self.assertEqual("/A\/B", result[0])
     self.assertEqual("A\/B", result[1])
     self.assertEqual("Found mindmap item", result[2])
 
