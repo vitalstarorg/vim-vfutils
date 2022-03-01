@@ -12,21 +12,33 @@
 #! tmux split-window -hd
 #! tmux split-window -vd
 #: reg
+#: ls
 #: help
+#: echo "hello"
+#:python3 run_unittest()
 
 ## Open local file
 - vimtest2.md
 - @vimtest2.md # added @ as a reminder it is a redirection
 
-# RunCmd Demo
+# RunCmd Demo1
 ```
-ls
+ls # press \<down>, assume there is a pane below.
 vim --version | grep python3
+```
+
+# RunCmd Demo2
+```
+#! tmux split-window -vd # press \\
+ls # press \<down>
+vim --version | grep python3
+exit # close tmux pane below
 ```
 
 # RunCmdUntil Demo
 ```
-clear
+#! tmux split-window -vd # press \\ to open tmux pane below
+clear # press `<down> to run until empty line or ```
 python3
 print("hello world!")
 exit()

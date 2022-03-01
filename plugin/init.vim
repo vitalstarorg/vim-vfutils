@@ -13,7 +13,7 @@ EOF
 function! EscapeLine(...)
     if a:0 == 0
       let line = getline(".")
-    else
+		else
       let line = a:1
     endif
     let line = substitute(line, "\\", "\\\\\\\\", 'g')
@@ -30,15 +30,17 @@ function! LCmd(...)
       return ""
     endif
     if results[0] != ""
-      execute results[0]
-      normal! <cr>
+      if results[3] != "" 
+        "one less <cr> for vimbang
+        execute results[0] 
+      else
+        silent! execute results[0] | execute ':redraw!'
+      endif
       if results[1] != ""
         let @/ = results[1]
-        "normal! k
       endif
     else
       echo "Nothing to execute"
-      "normal! k
     endif
     if results[2] != ""
       "skip echo as that will wait for ENTER.

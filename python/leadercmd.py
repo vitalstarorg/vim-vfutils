@@ -31,56 +31,56 @@ class LeaderCmd:
       #return [":!%s" % s,"",""]
       if not debug:
         ret = os.system(s)
-      return ["echo '%s'" % s,"hashbang",""]
+      return ["echo '%s'" % s,"hashbang","", "skip-cr"]
 
     m = re.search(LeaderCmd.vimbang, line)
     if m:
       s = m.group(1)
-      return [":%s" % s,"vimbang",""]
+      return [":%s" % s,"vimbang","", "skip-cr"]
 
     m = re.search(LeaderCmd.reg1, line)
     if m:
       s = m.group(1)
       s = re.sub(r'#', '\\#', s)
       s = re.sub(r'%', '\\%', s)
-      return [":!open '%s'" % s,"",""]
+      return [":!open '%s'" % s,"","", ""]
 
     m = re.search(LeaderCmd.reg2, line)
     if m:
       s = m.group(1)
       if s != ".":
         stmux = ":!tmux new-window -an '%s' -c '\\#{pane_current_path}' vim %s" % (s,s)
-        return [stmux,s,""]
+        return [stmux,s,"",""]
 
     m = re.search(LeaderCmd.reg3, line)
     if m:
       s = m.group(1)
       s = re.sub(r'/', '\\\/', s)
       s = s.rstrip()
-      return ["/%s" % s,s,"Found @Marker"]
+      return ["/%s" % s,s,"Found @Marker",""]
 
     m = re.search(LeaderCmd.reg4, line)
     if m:
       s = m.group(1)
       s = re.sub(r'/', '\\\/', s)
       s = s.rstrip()
-      return ["/%s" % s,s,"Found mindmap header"]
+      return ["/%s" % s,s,"Found mindmap header",""]
 
     m = re.search(LeaderCmd.reg5, line)
     if m:
       s = m.group(1)
       if s != ".":
         stmux = ":!tmux new-window -an '%s' -c '\\#{pane_current_path}' vim %s" % (s,s)
-        return [stmux,s,""]
+        return [stmux,s,"",""]
 
     m = re.search(LeaderCmd.reg6, line)
     if m:
       s = m.group(1)
       s = re.sub(r'/', '\\\/', s)
       s = s.rstrip()
-      return ["/%s" % s,s,"Found mindmap item"]
+      return ["/%s" % s,s,"Found mindmap item",""]
 
-    return ['','','']
+    return ['','','','']
 
   runcmd1 = r'^#@+ *(.*)' 
   def _extractRunCmd(line, direction):

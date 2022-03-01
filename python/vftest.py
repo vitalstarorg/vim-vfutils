@@ -1,5 +1,6 @@
 #print("Hello from Python source code!")
 import unittest
+import sys
 import urllib, urllib.request
 import json
 from leadercmd import *
@@ -27,11 +28,8 @@ class Sample:
       new_line = current_line[:col] + Sample._get_country() + current_line[col:]
       vim.current.buffer[row-1] = new_line
 
-#print("zz")
-
 
 def run_unittest():
-  #unittest.main()
   loader = unittest.TestLoader()
   suite = unittest.TestSuite()
   suite.addTest(unittest.makeSuite(TestVimPlugin))
