@@ -20,6 +20,7 @@
 ## Open local file
 - vimtest2.md
 - @vimtest2.md # added @ as a reminder it is a redirection
+- vimtest2.md@project # open a file and jump to the marker
 
 # RunCmd Demo1
 ```
