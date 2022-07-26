@@ -7,11 +7,12 @@ class LeaderCmd:
   reg1 = r'([a-z]*:\/\/[^ >,;)]*)' 
     # url
     # "https://aa.bb/cc#dd" "file://aa.bb"
-  reg2 = r'([a-zA-Z~_/]+[^ .]+\.[^0-9 @]+)@*([^ ]*)' 
-    # search marker by @
-    # "  @@ xx"
+  reg2 = r'([a-zA-Z~_/]+[^ .]+\.[^0-9 @]+)@*([^#]*)' 
+    # local file and search marker by @
+    # "  file.md@project
   #reg3 = r'@*([0-9a-zA-Z-~_/][^ .]+\.[^0-9 @]+)' 
     # local file
+    # "  @@ xx"
   reg4 = r'@+ *([^#]*)' 
     # local file
     # "  xx.xx "
@@ -28,7 +29,7 @@ class LeaderCmd:
     m = re.search(LeaderCmd.hashbang, line)
     if m:
       if LeaderCmd.debugmsg: print(">> hashbang")
-      s = m.group(1)
+      s = m.group(1).strip()
       #s = re.sub(r'#', '\\#', s)
       #return [":!%s" % s,"",""]
       if not debug:
@@ -38,13 +39,13 @@ class LeaderCmd:
     m = re.search(LeaderCmd.vimbang, line)
     if m:
       if LeaderCmd.debugmsg: print(">> vimbang")
-      s = m.group(1)
+      s = m.group(1).strip()
       return [":%s" % s,"vimbang","", "skip-cr","vimbang"]
 
     m = re.search(LeaderCmd.reg1, line)
     if m:
       if LeaderCmd.debugmsg: print(">> reg1")
-      s = m.group(1)
+      s = m.group(1).strip()
       s = re.sub(r'#', '\\#', s)
       s = re.sub(r'%', '\\%', s)
       return [":!open '%s'" % s,"","","","reg1"]
@@ -52,8 +53,8 @@ class LeaderCmd:
     m = re.search(LeaderCmd.reg2, line)
     if m and len(m.groups()) == 2:
       if LeaderCmd.debugmsg: print(">> reg2")
-      s = m.group(1)
-      t = m.group(2)
+      s = m.group(1).strip()
+      t = m.group(2).strip()
       #print("-- %s %s" % (s,t))
       if s != ".":
         if t != "":
@@ -73,7 +74,7 @@ class LeaderCmd:
     m = re.search(LeaderCmd.reg4, line)
     if m:
       if LeaderCmd.debugmsg: print(">> reg4")
-      s = m.group(1)
+      s = m.group(1).strip()
       s = re.sub(r'/', '\\\/', s)
       s = s.rstrip()
       return ["/%s" % s,s,"Found @Marker","","reg4"]
@@ -81,7 +82,7 @@ class LeaderCmd:
     m = re.search(LeaderCmd.reg5, line)
     if m:
       if LeaderCmd.debugmsg: print(">> reg5")
-      s = m.group(1)
+      s = m.group(1).strip()
       s = re.sub(r'/', '\\\/', s)
       s = s.rstrip()
       return ["/%s" % s,s,"Found mindmap header","","reg5"]
@@ -89,7 +90,7 @@ class LeaderCmd:
     m = re.search(LeaderCmd.reg6, line)
     if m:
       if LeaderCmd.debugmsg: print(">> reg6")
-      s = m.group(1)
+      s = m.group(1).strip()
       s = re.sub(r'/', '\\\/', s)
       s = s.rstrip()
       return ["/%s" % s,s,"Found mindmap item","","reg6"]
@@ -101,7 +102,7 @@ class LeaderCmd:
     m = re.search(LeaderCmd.runcmd1, line)
     cmd = ""
     if m:
-      cmd = m.group(1)
+      cmd = m.group(1).strip()
       #ret = os.system(c)
       #return ret
     else:
@@ -191,10 +192,16 @@ class TestLeaderCmd(unittest.TestCase):
     self.assertEqual("", result[2])
     self.assertEqual("reg2", result[4])
 
-    result = LeaderCmd.extractLCmd("- vimtest2.md@project")
+    result = LeaderCmd.extractLCmd("- vimtest2.md@project ")
     self.assertEqual(":!tmux new-window -an 'vimtest2.md' -c '\#{pane_current_path}' \"vim vimtest2.md -c '/project'\"", result[0])
     self.assertEqual("vimtest2.md", result[1])
     self.assertEqual("project", result[2])
+    self.assertEqual("reg2", result[4])
+
+    result = LeaderCmd.extractLCmd("- vimtest2.md@project file ")
+    self.assertEqual(":!tmux new-window -an 'vimtest2.md' -c '\#{pane_current_path}' \"vim vimtest2.md -c '/project file'\"", result[0])
+    self.assertEqual("vimtest2.md", result[1])
+    self.assertEqual("project file", result[2])
     self.assertEqual("reg2", result[4])
 
     # reg6
