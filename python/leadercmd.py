@@ -57,10 +57,11 @@ class LeaderCmd:
       t = m.group(2).strip()
       #print("-- %s %s" % (s,t))
       if s != ".":
+        win_name = os.path.basename(s)
         if t != "":
-          stmux = ":!tmux new-window -an '%s' -c '\\#{pane_current_path}' \"vim %s -c '/%s'\"" % (s,s,t)
+          stmux = ":!tmux new-window -an '%s' -c '\\#{pane_current_path}' \"vim %s -c '/%s'\"" % (win_name,s,t)
         else:
-          stmux = ":!tmux new-window -an '%s' -c '\\#{pane_current_path}' \"vim %s\"" % (s,s)
+          stmux = ":!tmux new-window -an '%s' -c '\\#{pane_current_path}' \"vim %s\"" % (win_name,s)
       return [stmux,s,t,"","reg2"]
 
 #    m = re.search(LeaderCmd.reg3, line)
@@ -131,7 +132,7 @@ class TestLeaderCmd(unittest.TestCase):
 
     # reg3: local file
     result = LeaderCmd.extractLCmd("**:@~/aa/bb/cc.dd")
-    self.assertEqual(":!tmux new-window -an '~/aa/bb/cc.dd' -c '\#{pane_current_path}' \"vim ~/aa/bb/cc.dd\"", result[0])
+    self.assertEqual(":!tmux new-window -an 'cc.dd' -c '\#{pane_current_path}' \"vim ~/aa/bb/cc.dd\"", result[0])
     self.assertEqual("~/aa/bb/cc.dd", result[1])
     self.assertEqual("", result[2])
     self.assertEqual("reg2", result[4])
@@ -172,17 +173,17 @@ class TestLeaderCmd(unittest.TestCase):
 
     # reg2
     result = LeaderCmd.extractLCmd(" - a/b.out ")
-    self.assertEqual(":!tmux new-window -an 'a/b.out' -c '\#{pane_current_path}' \"vim a/b.out\"", result[0])
+    self.assertEqual(":!tmux new-window -an 'b.out' -c '\#{pane_current_path}' \"vim a/b.out\"", result[0])
     self.assertEqual("a/b.out", result[1])
     self.assertEqual("", result[2])
 
     result = LeaderCmd.extractLCmd(" - a/b.out@")
-    self.assertEqual(":!tmux new-window -an 'a/b.out' -c '\#{pane_current_path}' \"vim a/b.out\"", result[0])
+    self.assertEqual(":!tmux new-window -an 'b.out' -c '\#{pane_current_path}' \"vim a/b.out\"", result[0])
     self.assertEqual("a/b.out", result[1])
     self.assertEqual("", result[2])
 
     result = LeaderCmd.extractLCmd(" - a/b.out@a_b")
-    self.assertEqual(":!tmux new-window -an 'a/b.out' -c '\#{pane_current_path}' \"vim a/b.out -c '/a_b'\"", result[0])
+    self.assertEqual(":!tmux new-window -an 'b.out' -c '\#{pane_current_path}' \"vim a/b.out -c '/a_b'\"", result[0])
     self.assertEqual("a/b.out", result[1])
     self.assertEqual("a_b", result[2])
 
