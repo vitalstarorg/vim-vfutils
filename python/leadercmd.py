@@ -97,8 +97,8 @@ class LeaderCmd:
       return ["/%s" % s,s,"Found mindmap item","","reg6"]
 
     return ['','','','']
-
   runcmd1 = r'^#@+ *(.*)' 
+
   def _extractRunCmd(line, direction):
     m = re.search(LeaderCmd.runcmd1, line)
     cmd = ""
@@ -111,7 +111,8 @@ class LeaderCmd:
       line = re.sub(r';$', '\;', line) # only the last semi-colon
       line = re.sub(r'"', '\\"', line)
       line = re.sub(r'\$', '\\\$', line)
-      cmd = "tmux send-keys -t {%s-of} \"%s\" C-m" % (direction,line)
+      line = re.sub(r'^-', ' -', line)
+      cmd = "tmux send-keys -l -t {%s-of} \"%s\" C-m" % (direction,line)
     return cmd
 
   def extractRunCmd(line, direction):
@@ -219,16 +220,21 @@ class TestLeaderCmd(unittest.TestCase):
   def test_extractRunCmd(self):
     s = "a = \"-\\\\-\""
     result = LeaderCmd._extractRunCmd(s,"down")
-    self.assertEqual("tmux send-keys -t {down-of} \"a = \\\"-\\\\\\\\-\\\"\" C-m", result)
+    self.assertEqual("tmux send-keys -l -t {down-of} \"a = \\\"-\\\\\\\\-\\\"\" C-m", result)
     s = "a = '-\\\\-'"
     result = LeaderCmd._extractRunCmd(s,"down")
-    self.assertEqual("tmux send-keys -t {down-of} \"a = '-\\\\\\\\-'\" C-m", result)
+    self.assertEqual("tmux send-keys -l -t {down-of} \"a = '-\\\\\\\\-'\" C-m", result)
     s = "#@ tmux split-window -hd"
     result = LeaderCmd._extractRunCmd(s,"down")
     self.assertEqual("tmux split-window -hd", result)
     s = "echo \"$WAIT\""
     result = LeaderCmd._extractRunCmd(s,"down")
-    self.assertEqual("tmux send-keys -t {down-of} \"echo \\\"\$WAIT\\\"\" C-m", result)
+    self.assertEqual("tmux send-keys -l -t {down-of} \"echo \\\"\$WAIT\\\"\" C-m", result)
+    s = "-n"
+    result = LeaderCmd._extractRunCmd(s,"down")
+    self.assertEqual("tmux send-keys -l -t {down-of} \" -n\" C-m", result)
+      # tmux send-keys will be sensitive to bind-key, which carry special meaning e.g. string beginning with "-".
+      # temp fix: adding a space before that will fool send-keys to interpret "-" differently.
 
 if __name__ == '__main__':
   unittest.main()
