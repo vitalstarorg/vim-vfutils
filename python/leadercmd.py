@@ -22,8 +22,8 @@ class LeaderCmd:
   reg6 = r'[-+\*]+ ([^#]*)' 
     # mindmap right & left
     #" -- xx" " ++ xx" " ** xx"
-  hashbang = r'^#! *(.*)' 
-  vimbang = r'^#: *(.*)' 
+  hashbang = r'^[ \t]*#! *(.*)' 
+  vimbang = r'^[ \t]*#: *(.*)' 
 
   def extractLCmd(line, debug=False):
     m = re.search(LeaderCmd.hashbang, line)
@@ -125,6 +125,12 @@ class LeaderCmd:
 
 class TestLeaderCmd(unittest.TestCase):
   def test_extractLCmd(self):
+    # hashbang & vimbang
+    result = LeaderCmd.extractLCmd("  \t#! echo ")
+    self.assertEqual("echo 'echo'", result[0])
+    result = LeaderCmd.extractLCmd("  \t#: bd ")
+    self.assertEqual(":bd", result[0])
+
     # reg1: url
     result = LeaderCmd.extractLCmd("[MindMap](https://plantuml.com/mindmap-diagram")
     self.assertEqual(":!open 'https://plantuml.com/mindmap-diagram'", result[0])
