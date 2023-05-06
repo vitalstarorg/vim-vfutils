@@ -111,8 +111,11 @@ class LeaderCmd:
       line = re.sub(r';$', '\;', line) # only the last semi-colon
       line = re.sub(r'"', '\\"', line)
       line = re.sub(r'\$', '\\\$', line)
-      line = re.sub(r'^-', ' -', line)
-      cmd = "tmux send-keys -l -t {%s-of} \"%s\"; tmux send-keys -t {%s-of} C-m" % (direction,line,direction)
+      #line = re.sub(r'^-', ' -', line)
+      if line[0:1] == "-":
+        cmd = "tmux send-keys -l -t {%s-of} -- \"%s\"; tmux send-keys -t {%s-of} C-m" % (direction,line,direction)
+      else:
+        cmd = "tmux send-keys -l -t {%s-of} \"%s\"; tmux send-keys -t {%s-of} C-m" % (direction,line,direction)
     return cmd
 
   def extractRunCmd(line, direction):
@@ -238,9 +241,7 @@ class TestLeaderCmd(unittest.TestCase):
     self.assertEqual("tmux send-keys -l -t {down-of} \"echo \\\"\$WAIT\\\"\"; tmux send-keys -t {down-of} C-m", result)
     s = "-n"
     result = LeaderCmd._extractRunCmd(s,"down")
-    self.assertEqual("tmux send-keys -l -t {down-of} \" -n\"; tmux send-keys -t {down-of} C-m", result)
-      # tmux send-keys will be sensitive to bind-key, which carry special meaning e.g. string beginning with "-".
-      # temp fix: adding a space before that will fool send-keys to interpret "-" differently.
+    self.assertEqual("tmux send-keys -l -t {down-of} -- \"-n\"; tmux send-keys -t {down-of} C-m", result)
 
 if __name__ == '__main__':
   unittest.main()
